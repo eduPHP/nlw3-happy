@@ -1,0 +1,31 @@
+export const colors = {
+    textBase: '#5C8599',
+    textTitle: '#4D6F80',
+    textComplements: '#8FA7B2',
+    textLink: '#0089A5',
+    textSuccess: '#37C77F',
+    green: '#39CC83',
+    greenLight: '#EDFFF6',
+    red: '#FF669D',
+    redLight: '#FCF0F4',
+    blue: '#15C3D6',
+    blueLight: '#E6F7FB',
+    border: '#B3DAE2',
+    borderSuccess: '#A1E9C5',
+    borderWarning: '#FFBCD4',
+    line: '#D3E2E5',
+    backgroundHeader: '#F9FAFC',
+    borderHeader: '#dde3f0',
+    closeHeader: '#ff969d',
+    background: '#15C3D6',
+    backgroundOnboarding: '#F2F3F5',
+    onboardingButtonColor: '#D1EDF2',
+    onboardingActivePage: '#FFD152',
+    onboardingInactivePage: '#BECFD8',
+}
+
+export const fonts = {
+    bold: 'Nunito_700Bold',
+    semibold: 'Nunito_600SemiBold',
+    extrabold: 'Nunito_800ExtraBold',
+}

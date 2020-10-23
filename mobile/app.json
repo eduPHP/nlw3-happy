@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "Happy",
+    "slug": "happy",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/images/icon.png",
+    "splash": {
+      "image": "./src/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#15C3D6"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}

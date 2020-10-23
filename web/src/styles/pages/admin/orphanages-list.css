@@ -1,0 +1,97 @@
+#orphanages-list {
+    display: flex;
+}
+#orphanages-list aside {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+#orphanages-list .container {
+    max-width: 1015px;
+    margin: 0 auto;
+    padding: 30px 10px;
+    flex: 1 1 100%;
+    color: #4D6F80;
+}
+
+#orphanages-list header {
+    padding: 20px 0;
+    border-bottom: 1px solid #D3E2E5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+#orphanages-list header h1 {
+    font-size: 32px;
+    font-weight: 800;
+}
+#orphanages-list header small {
+    color: #8FA7B2;
+}
+
+#orphanages-list .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+}
+
+#orphanages-list .grid .card {
+    border: 1px solid #D3E2E5;
+    background: #fff;
+    border-radius: 20px;
+    height: 310px;
+    display: flex;
+    flex-direction: column;
+}
+#orphanages-list .card .map {
+    flex: 1 1 100%;
+}
+#orphanages-list .card .map .leaflet-container {
+    border-bottom: 1px solid #DDE3F0;
+    border-radius: 20px;
+    flex: 1 1 100%;
+}
+
+#orphanages-list .card .content {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#orphanages-list .card .actions {
+    display: flex;
+    align-items: center;
+}
+#orphanages-list .actions button:hover {
+    background-color: #dee4e7;
+}
+
+#orphanages-list .actions button {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    background-color: #EBF2F5;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color ease 0.2s;
+}
+#orphanages-list .actions button:last-child {
+    margin-left: 0.75rem;
+}
+#orphanages-list .empty-list {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#orphanages-list .empty-list span {
+    margin-top: 30px;
+    color: #8FA7B2;
+}
