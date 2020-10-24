@@ -18,7 +18,7 @@ export default {
         const passwordResetRepo = getRepository(PasswordReset)
         const user = await userRepo.findOne({email})
         if (!user) {
-            return res.status(400).json({error: 'Não foi possível enviar o email.'})
+            return res.status(400).json({errors: {email: 'Não foi possível enviar o email.'}})
         }
 
         const token = Math.random().toString(36).substring(3)
@@ -50,7 +50,9 @@ export default {
         const passwordReset = await passwordResetRepo.findOne({id: resetId}, { relations: ['user'] })
         // compara token com token gravado
         if (!passwordReset || passwordReset.used_at || !await bcrypt.compare(passwordReset.token, rawToken)) {
-            return res.status(400).json({error: 'Não foi possível resetar sua senha.'})
+            return res.status(400).json({
+                errors: {password: 'Não foi possível resetar sua senha.'}
+            })
         }
 
         // atualiza senha
