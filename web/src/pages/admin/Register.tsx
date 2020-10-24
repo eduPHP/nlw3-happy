@@ -1,28 +1,42 @@
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, SyntheticEvent, useCallback, useState} from "react";
 import logoAlt from '../../images/logo-alt.svg'
 import eye from '../../images/eye-icon.svg'
 import closeEye from '../../images/eye-icon-close.svg'
 import {FiArrowLeft} from 'react-icons/fi'
 import '../../styles/pages/admin/login.css'
 import api from "../../services/api";
+import Errors from '../../util/errors'
+
+interface RefisterForm {
+    name: string
+    email: string
+    password: string
+}
 
 export default function Register() {
-    const [email, setEmail] = useState('')
-    const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
+    const [form, setForm] = useState<RefisterForm>({
+        email: '',
+        name: '',
+        password: '',
+    })
     const [showPassword, setShowPassword] = useState(false)
+    const errors = new Errors([])
+
+    function setValue(e: React.ChangeEvent<HTMLInputElement>) {
+        errors.remove(e.currentTarget.name)
+        setForm({
+            ...form,
+            [e.currentTarget.name]: e.currentTarget.value
+        })
+    }
 
     function handleRegistration(event: FormEvent) {
         event.preventDefault()
 
-        const user = {
-            name,
-            email,
-            password
-        }
-
-        api.post('auth/register', user).then(res => {
+        api.post('auth/register', form).then(res => {
             console.log(res.data)
+        }).catch(err => {
+            errors.record(err.response.data.errors)
         })
     }
 
@@ -45,28 +59,31 @@ export default function Register() {
                     <label>
                         <span>Nome</span>
                         <input className="form-input" name="name"  type="text"
-                               value={name}
-                               onChange={event => setName(event.target.value)}
+                               value={form.name}
+                               onChange={setValue}
                         />
+                        {errors.has('name') && (<span>{errors.first('name')}</span>)}
                     </label>
                     <label>
                         <span>E-mail</span>
                         <input className="form-input" name="email"  type="email"
-                               value={email}
-                               onChange={event => setEmail(event.target.value)}
+                               value={form.email}
+                               onChange={setValue}
                         />
+                        {errors.has('email') && (<span>{errors.first('email')}</span>)}
                     </label>
                     <label>
                         <span>Senha</span>
                         <input className="form-input" name="password"
                                type={showPassword ? 'text' : 'password'}
-                               value={password}
-                               onChange={event => setPassword(event.target.value)}
+                               value={form.password}
+                               onChange={setValue}
                         />
                         <img className="see-password"  alt="Mostrar Senha"
                              src={showPassword ? closeEye : eye}
                              onClick={() => setShowPassword(!showPassword)}
                         />
+                        {errors.has('password') && (<span>{errors.first('password')}</span>)}
                     </label>
 
                     <button className="submit" type="submit">Cadastrar</button>
