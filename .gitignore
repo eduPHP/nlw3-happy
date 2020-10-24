@@ -1,5 +1,6 @@
 .idea
 backend/node_modules
+backend/.env
 mobile/node_modules
 web/node_modules
 backend/uploads/*.*

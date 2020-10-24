@@ -1,15 +1,30 @@
-import React, {useState} from "react";
+import React, {FormEvent, useState} from "react";
 import logoAlt from '../../images/logo-alt.svg'
 import eye from '../../images/eye-icon.svg'
 import closeEye from '../../images/eye-icon-close.svg'
 import {FiArrowLeft} from 'react-icons/fi'
 import '../../styles/pages/admin/login.css'
+import api from "../../services/api";
 
 export default function Register() {
     const [email, setEmail] = useState('')
     const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
+
+    function handleRegistration(event: FormEvent) {
+        event.preventDefault()
+
+        const user = {
+            name,
+            email,
+            password
+        }
+
+        api.post('auth/register', user).then(res => {
+            console.log(res.data)
+        })
+    }
 
     return (
         <div id="login">
@@ -24,7 +39,7 @@ export default function Register() {
                 <button className="return" type="button">
                     <FiArrowLeft size={26} color="#15C3D6" />
                 </button>
-                <form className="login-form">
+                <form className="login-form" method="POST" onSubmit={handleRegistration}>
                     <h2>Cadastrar</h2>
 
                     <label>
