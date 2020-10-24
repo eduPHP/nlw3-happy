@@ -22,7 +22,7 @@ export default async (req: Request, res: Response, next: CallableFunction) => {
         return res.status(401).json({ error: "No token provided" });
     }
 
-    const [scheme, token] = authHeader.split("Bearer ");
+    const [, token] = authHeader.split("Bearer ");
 
     try {
         req.user = users_view.render(await promisify(jwt.verify)(token, config.app.key))

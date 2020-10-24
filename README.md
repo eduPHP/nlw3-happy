@@ -2,7 +2,10 @@
 
 ### Backend
 - Node.js
-- Typescript, Express, TypeORM, Yup, MySQL
+- Express, TypeORM, Yup, MySQL
 
 ### Web
 - React
+
+### Mobile
+- React native

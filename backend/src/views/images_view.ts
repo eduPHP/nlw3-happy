@@ -1,9 +1,10 @@
 import Image from '../models/Image'
+import {app} from "../util/config";
 export default {
     render(image: Image) {
         return {
             id: image.id,
-            url: `http://192.168.2.101:3333/uploads/${image.path}`
+            url: `${app.backend}/uploads/${image.path}`
         }
     },
 

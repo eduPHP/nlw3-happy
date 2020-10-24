@@ -1,10 +1,10 @@
 import {Request, Response} from 'express'
-import {getRepository} from "typeorm";
-import jwt from 'jsonwebtoken'
-import users_view from "../views/users_view";
-import bcrypt from "../util/bcrypt";
-import User from "../models/User";
-import config from "../util/config";
+import {getRepository} from "typeorm"
+
+import createToken from "../util/createToken"
+import users_view from "../views/users_view"
+import bcrypt from "../util/bcrypt"
+import User from "../models/User"
 
 export default {
     async store(req: Request, res: Response) {
@@ -21,11 +21,7 @@ export default {
 
         return res.json({
             user: users_view.render(user),
-            token: jwt.sign(
-                JSON.stringify(user),
-                config.app.key,
-                {expiresIn: 86400}
-            )
+            token: createToken(user)
         })
     }
 }

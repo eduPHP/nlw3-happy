@@ -1,10 +1,11 @@
 import {Request, Response} from 'express'
 import { getRepository } from 'typeorm'
 import * as Yup from 'yup'
-import bcrypt from "../util/bcrypt";
 
-import User from "../models/User";
-import users_view from "../views/users_view";
+import createToken from "../util/createToken"
+import users_view from "../views/users_view"
+import bcrypt from "../util/bcrypt"
+import User from "../models/User"
 
 export default {
     async store(req: Request, res: Response) {
@@ -31,6 +32,9 @@ export default {
 
         await repo.save(user)
 
-        return res.status(201).json({user: users_view.render(user)})
+        return res.status(201).json({
+            user: users_view.render(user),
+            token: createToken(user)
+        })
     }
 }
