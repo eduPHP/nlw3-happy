@@ -1,8 +1,16 @@
 import {Dimensions} from "react-native";
+import * as Location from "expo-location";
 
 interface Point {
     latitude: number
     longitude: number
+}
+
+export interface Region {
+    latitude: number
+    longitude: number
+    latitudeDelta: number
+    longitudeDelta: number
 }
 
 
@@ -12,7 +20,20 @@ interface Point {
  * https://github.com/react-native-maps/react-native-maps/issues/505#issuecomment-243423775
  * @param points
  */
-export function regionForCoordinates(points: Point[]) {
+export async function regionForCoordinates(points: Point[]): Promise<Region> {
+    if (points.length === 0) {
+        const { width, height } = Dimensions.get('window');
+        const aspectRatio = width / height;
+        const longitudeDelta = 0.05;
+        const latitudeDelta = longitudeDelta * aspectRatio;
+        const {latitude, longitude} = await getLocation()
+        return {
+            latitude,
+            longitude,
+            latitudeDelta,
+            longitudeDelta
+        }
+    }
     if (points.length === 1) {
         const { width, height } = Dimensions.get('window');
         const aspectRatio = width / height;
@@ -55,4 +76,15 @@ export function regionForCoordinates(points: Point[]) {
         latitudeDelta: deltaX + (deltaX / 2),
         longitudeDelta: deltaY + (deltaY / 3)
     };
+}
+
+export async function getLocation(): Promise<Point> {
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+        alert('Permissão negada');
+        return await getLocation()
+    }
+    const {coords} = await Location.getCurrentPositionAsync({})
+
+    return {latitude: coords.latitude, longitude: coords.longitude}
 }

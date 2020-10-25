@@ -1,28 +1,41 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
 import {RectButton} from 'react-native-gesture-handler';
 import MapView, {MapEvent, Marker} from 'react-native-maps';
 
-import {regionForCoordinates} from "../../util/regionForCoordinates";
+import {Region, regionForCoordinates} from "../../util/regionForCoordinates";
 
 import mapMarkerImg from '../../images/map-marker.png';
 import {fonts} from "../../util/styles";
 import CursorSelect from "../../images/CursorSelect";
 import Header from "../../components/Header";
+import Splash from "../Splash";
 
 export default function SelectMapPosition() {
     const navigation = useNavigation();
     const [position, setPosition] = useState({latitude: 0, longitude: 0})
     const [touched, setTouched] = useState<boolean>(false)
+    const [mapConfig, setMapConfig] = useState<Region>()
+    useEffect(() => {
+        async function omg() {
+            setMapConfig(await regionForCoordinates([]))
+        }
+        omg()
+    }, [])
 
     function handleNextStep() {
         navigation.navigate('OrphanageData', { position });
     }
 
-    function handleSelectMapPosition(event: MapEvent) {
+    async function handleSelectMapPosition(event: MapEvent) {
         setPosition(event.nativeEvent.coordinate)
+        setMapConfig(await regionForCoordinates([event.nativeEvent.coordinate]))
+    }
+
+    if(!mapConfig || !mapConfig.latitude) {
+        return (<Splash text="Detectando sua localização..." />)
     }
 
     return (
@@ -33,9 +46,8 @@ export default function SelectMapPosition() {
                 />
             )}
             <MapView
-                region={regionForCoordinates([
-                    {latitude: -28.830392, longitude: -52.498565}
-                ])}
+                region={mapConfig}
+                rotateEnabled={false}
                 style={styles.mapStyle}
                 onPress={handleSelectMapPosition}
             >

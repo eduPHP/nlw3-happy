@@ -3,10 +3,9 @@ import {useNavigation, useFocusEffect} from '@react-navigation/native'
 import {Dimensions, Image, StyleSheet, Text, View} from "react-native";
 import {BorderlessButton, RectButton} from "react-native-gesture-handler";
 import React, {useState, useCallback} from "react";
-import * as Location from 'expo-location';
 
 import {Feather} from "@expo/vector-icons";
-import {regionForCoordinates} from "../util/regionForCoordinates";
+import {regionForCoordinates, Region} from "../util/regionForCoordinates";
 import mapMarker from "../images/map-marker.png";
 import {colors, fonts} from "../util/styles";
 import api from "../services/api";
@@ -24,38 +23,21 @@ interface Orphanage {
         url: string
     }>
 }
-const myLocation = {
-    latitude: -28.830392,
-    longitude: -52.498565
-}
 
 export default function OrphanagesMap() {
     const navigation = useNavigation()
     const [orphanages, setOrphanages] = useState<Orphanage[]>([])
     const [selectedOrphanage, setSelectedOrphanage] = useState<Orphanage | null>(null)
     const [loading, setLoading] = useState(true)
-    const [mapConfig, setMapConfig] = useState(regionForCoordinates([myLocation]))
-
-    async function getLocation() {
-        let { status } = await Location.requestPermissionsAsync();
-        if (status !== 'granted') {
-            alert('Permissão negada');
-            await getLocation()
-            return
-        }
-        const {coords} = await Location.getCurrentPositionAsync({})
-
-        setMapConfig(regionForCoordinates([{latitude: coords.latitude, longitude: coords.longitude}]))
-    }
+    const [mapConfig, setMapConfig] = useState<Region>()
 
     async function getOrphanages() {
         setLoading(true);
-        await getLocation();
-        api.get('orphanages').then(response => {
+        setMapConfig(await regionForCoordinates([]));
+        api.get('orphanages').then(async response => {
             if (response.data.orphanages.length) {
                 setOrphanages(response.data.orphanages)
-            } else {
-                setMapConfig(regionForCoordinates(response.data.orphanages))
+                setMapConfig(await regionForCoordinates(response.data.orphanages))
             }
             setSelectedOrphanage(null)
             setLoading(false)
@@ -76,18 +58,17 @@ export default function OrphanagesMap() {
         navigation.navigate('SelectMapPosition')
     }
 
-    function handleMarkerTouch(orphanage: Orphanage) {
+    async function handleMarkerTouch(orphanage: Orphanage) {
         setSelectedOrphanage(orphanage)
-        setMapConfig(regionForCoordinates([orphanage]))
-
+        setMapConfig(await regionForCoordinates([orphanage]))
     }
 
-    function handleUnselectOrphanage() {
+    async function handleUnselectOrphanage() {
         setSelectedOrphanage(null)
-        setMapConfig(regionForCoordinates(orphanages))
+        setMapConfig(await regionForCoordinates(orphanages))
     }
 
-    if(loading) {
+    if(loading || !mapConfig || !mapConfig.latitude) {
         return (<Splash text="Obtendo lista de orfanatos..." />)
     }
 
@@ -96,6 +77,7 @@ export default function OrphanagesMap() {
             <MapView
                 style={styles.map}
                 provider={PROVIDER_GOOGLE}
+                rotateEnabled={false}
                 region={mapConfig}>
                 {orphanages.map(orphanage => (
                     <Marker

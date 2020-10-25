@@ -4,6 +4,7 @@ import {RectButton} from 'react-native-gesture-handler';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import api from "../../services/api";
 import {styles} from "./formStyles";
+import Cancel from "../../components/Cancel";
 
 interface OrphanageDataParams {
     orphanage: {

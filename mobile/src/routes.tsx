@@ -10,6 +10,7 @@ import OrphanagesMap from "./pages/OrphanagesMap";
 import Onboarding from "./pages/Onboarding";
 import OrphanageDetails from "./pages/OrphanageDetails";
 import Done from "./components/Done";
+import Cancel from "./components/Cancel";
 
 const {Navigator, Screen} = createStackNavigator()
 
@@ -17,15 +18,16 @@ export default function Routes() {
     return (
         <NavigationContainer>
             <Navigator screenOptions={{headerShown: false}}>
-                <Screen name={'Onboarding'} component={Onboarding} />
-                <Screen name={'Done'} component={Done} />
-                <Screen name={'OrphanagesMap'} component={OrphanagesMap} />
-                <Screen name={'OrphanageDetails'} component={OrphanageDetails} />
-                <Screen name={'SelectMapPosition'} component={SelectMapPosition} />
+                <Screen name={'Onboarding'} component={Onboarding}/>
+                <Screen name={'Done'} component={Done}/>
+                <Screen name={'Cancel'} component={Cancel}/>
+                <Screen name={'OrphanagesMap'} component={OrphanagesMap}/>
+                <Screen name={'OrphanageDetails'} component={OrphanageDetails}/>
+                <Screen name={'SelectMapPosition'} component={SelectMapPosition}/>
                 <Screen
                     options={{
                         headerShown: true,
-                        header: () => <Header title="Informe os dados" />
+                        header: () => <Header title="Informe os dados"/>
                     }}
                     name={'OrphanageData'}
                     component={OrphanageData}
@@ -33,7 +35,7 @@ export default function Routes() {
                 <Screen
                     options={{
                         headerShown: true,
-                        header: () => <Header title="Informe as instruções" />
+                        header: () => <Header title="Informe as instruções"/>
                     }}
                     name={'OrphanageVisitaion'}
                     component={OrphanageVisitaion}
