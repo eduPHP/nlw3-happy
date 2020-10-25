@@ -10,8 +10,8 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     uploadedImage: {
-        width: 64,
-        height: 64,
+        aspectRatio: 1,
+        height: 80,
         borderRadius: 20,
         marginBottom: 24,
         marginRight: 8
@@ -56,8 +56,8 @@ export const styles = StyleSheet.create({
         borderColor: '#96d2f0',
         borderWidth: 1.4,
         borderRadius: 20,
-        width: 64,
-        height: 64,
+        aspectRatio: 1,
+        height: 80,
         justifyContent: 'center',
         alignItems: 'center',
     },

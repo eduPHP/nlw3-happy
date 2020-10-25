@@ -12,6 +12,11 @@ interface HeaderProps {
 
 export default function Header({title, showCancel = true}: HeaderProps) {
     const navigation = useNavigation()
+
+    function handleClose() {
+        navigation.navigate('Cancel')
+    }
+
     return (
         <View style={styles.container}>
             <BorderlessButton style={styles.button} onPress={navigation.goBack}>
@@ -19,7 +24,7 @@ export default function Header({title, showCancel = true}: HeaderProps) {
             </BorderlessButton>
             <Text style={styles.title}>{title}</Text>
             {showCancel ? (
-                <BorderlessButton style={styles.button} onPress={() => navigation.navigate('Cancel')}>
+                <BorderlessButton style={styles.button} onPress={handleClose}>
                     <Feather name="x" size={24} color={colors.closeHeader}/>
                 </BorderlessButton>
             ) : (<View style={styles.button} />)}
