@@ -74,6 +74,7 @@
 #message .buttons button.cancel {
     background-color: #fd659c;
     text-decoration: underline;
+    border: 2px solid #D6487B;
 }
 
 #message .buttons button.cancel:hover {

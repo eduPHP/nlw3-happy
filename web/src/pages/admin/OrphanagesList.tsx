@@ -7,6 +7,7 @@ import happyMapIcon from "../../util/mapIcon";
 import api from "../../services/api";
 import 'leaflet/dist/leaflet.css'
 import MessageDelete from "./MessageDelete";
+import Toast from "../../components/Toast";
 
 const tilesUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -21,6 +22,7 @@ export default function OrphanagesList() {
     const [orphanages, setOrphanages] = useState<Orphanage[]>([])
     const [hasPending, setHasPending] = useState(false)
     const [remove, setRemove] = useState<Orphanage|null>(null)
+    const [toasts, setToasts] = useState<Toast[]>([])
 
     useEffect(() => {
         api.get('admin/orphanages').then(res => {
@@ -29,12 +31,24 @@ export default function OrphanagesList() {
         })
     }, [remove])
 
+    function handleRemove(removed: boolean) {
+        if (removed) {
+            setToasts([{
+                title: '',
+                description: `Orfanato ${remove?.name} removido!`
+            }])
+            setTimeout(() => setToasts([]), 4000)
+        }
+        setRemove(null)
+    }
+
     if (remove) {
-        return (<MessageDelete orphanage={remove} setRemove={setRemove} />)
+        return (<MessageDelete orphanage={remove} setRemove={handleRemove} />)
     }
 
     return (
         <div id="orphanages-list">
+            <Toast toastList={toasts} />
             <AdminSidebar page="orphanages" hasPending={hasPending} />
             <div className="container">
                 <header>

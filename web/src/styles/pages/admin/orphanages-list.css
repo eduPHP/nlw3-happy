@@ -95,3 +95,25 @@
     margin-top: 30px;
     color: #8FA7B2;
 }
+
+#orphanages-list .return svg {
+    margin-right: 0.5rem;
+}
+
+#orphanages-list .return {
+    margin-top: 2rem;
+    color: #15C3D6;
+    font-weight: 400;
+    text-decoration: none;
+    border-radius: 16px;
+    background-color: #d3e2e5;
+    height: 48px;
+    padding: 0 1.25rem 0 0.75rem;
+    border: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#orphanages-list .return:hover {
+    text-decoration: underline;
+}

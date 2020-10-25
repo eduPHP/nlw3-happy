@@ -5,7 +5,9 @@ import {Map, Marker, TileLayer} from "react-leaflet";
 import happyMapIcon from "../../util/mapIcon";
 import 'leaflet/dist/leaflet.css'
 import api from "../../services/api";
-import {useHistory} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
+import Toast from "../../components/Toast";
+import {FiArrowLeft} from "react-icons/fi";
 
 const tilesUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -17,8 +19,8 @@ interface Orphanage {
 }
 
 export default function OrphanagesPending() {
-    const history = useHistory()
     const [orphanages, setOrphanages] = useState<Orphanage[]>([])
+    const [toasts, setToasts] = useState<Toast[]>([])
 
     function getOrphanages() {
         api.get('admin/orphanages?status=pending').then(res => {
@@ -26,17 +28,23 @@ export default function OrphanagesPending() {
         })
     }
     useEffect(() => {
-        getOrphanages()
+        return getOrphanages()
     }, [orphanages])
 
     function handleApprove(orphanage: Orphanage) {
         api.put(`admin/orphanages/${orphanage.id}/approve`).then(res => {
+            setToasts([{
+                title: 'Sucesso',
+                description: `Orfanato ${orphanage.name} aprovado!`
+            }])
+            setTimeout(() => setToasts([]), 4000)
             getOrphanages()
         })
     }
 
     return (
         <div id="orphanages-list">
+            <Toast toastList={toasts} />
             <AdminSidebar page="pending" hasPending={false} />
             <div className="container">
                 <header>
@@ -102,6 +110,10 @@ export default function OrphanagesPending() {
                             <rect x="25.667" y="47.667" width="25.6667" height="11" rx="4" fill="white"/>
                         </svg>
                         <span>Nenhum no momento</span>
+                        <Link className="return" to="/admin/orphanages">
+                            <FiArrowLeft size={26} color="#15C3D6" />
+                            Voltar para a lista
+                        </Link>
                     </div>
                 )}
 
