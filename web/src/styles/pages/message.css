@@ -56,9 +56,26 @@
     cursor: pointer;
     transition: background-color ease 0.2s;
 }
+
+#message .buttons {
+    display: flex;
+}
+#message .buttons button {
+    margin: 0 0.5rem;
+}
 #message.green .text button {
     background-color: #31B272;
 }
+
 #message.red .text button {
     background-color: #D6487B;
+}
+
+#message .buttons button.cancel {
+    background-color: #fd659c;
+    text-decoration: underline;
+}
+
+#message .buttons button.cancel:hover {
+    background-color: #ff8fb5;
 }

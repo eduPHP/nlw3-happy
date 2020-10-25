@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {ScrollView, View, StyleSheet, Switch, Text, TextInput} from 'react-native';
+import {ScrollView, View, StyleSheet, Switch, Text, TextInput, ActivityIndicator} from 'react-native';
 import {RectButton} from 'react-native-gesture-handler';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import api from "../../services/api";
@@ -22,15 +22,18 @@ export default function OrphanageVisitation() {
     const [instructions, setInstructions] = useState('')
     const [opening_hours, setOpeningHours] = useState('')
     const [open_on_weekends, setOpenOnWeekends] = useState(true)
+    const [working, setWorking] = useState(false)
 
     async function handleCreateOrphanage() {
+        if (working) return
+        setWorking(true)
         const data = new FormData()
         data.append('latitude', String(params.orphanage.latitude))
         data.append('longitude', String(params.orphanage.longitude))
         data.append('name', params.orphanage.name)
         data.append('about', params.orphanage.about)
-        data.append('instructions', instructions)
-        data.append('opening_hours', opening_hours)
+        data.append('instructions', instructions.trim())
+        data.append('opening_hours', opening_hours.trim())
         data.append('open_on_weekends', String(open_on_weekends))
         params.orphanage.images.forEach((image, index) => {
             data.append('images', {
@@ -40,9 +43,14 @@ export default function OrphanageVisitation() {
             } as any)
         })
 
-        await api.post('orphanages', data)
+        await api.post('orphanages', data).then(() => {
+            setWorking(false)
+            navigation.navigate('Done')
+        }).catch(err => {
+            setWorking(false)
+            console.log(err.response.data.errors)
+        })
 
-        navigation.navigate('OrphanagesMap')
     }
 
     return (
@@ -75,7 +83,11 @@ export default function OrphanageVisitation() {
             </View>
 
             <RectButton style={styles.nextButton} onPress={handleCreateOrphanage}>
-                <Text style={styles.nextButtonText}>Cadastrar</Text>
+                {working ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                    <Text style={styles.nextButtonText}>Cadastrar</Text>
+                )}
             </RectButton>
         </ScrollView>
     )

@@ -23,10 +23,11 @@ export default function Register() {
     const errors = new Errors([])
 
     function setValue(e: React.ChangeEvent<HTMLInputElement>) {
-        errors.remove(e.currentTarget.name)
+        const {value, name} = e.currentTarget
+        errors.remove(name)
         setForm({
             ...form,
-            [e.currentTarget.name]: e.currentTarget.value
+            [name]: value
         })
     }
 
@@ -35,9 +36,7 @@ export default function Register() {
 
         api.post('auth/register', form).then(res => {
             console.log(res.data)
-        }).catch(err => {
-            errors.record(err.response.data.errors)
-        })
+        }).catch(err => errors.record(err.response.data.errors))
     }
 
     return (
@@ -62,7 +61,7 @@ export default function Register() {
                                value={form.name}
                                onChange={setValue}
                         />
-                        {errors.has('name') && (<span>{errors.first('name')}</span>)}
+                        {errors.print('name')}
                     </label>
                     <label>
                         <span>E-mail</span>
@@ -70,7 +69,7 @@ export default function Register() {
                                value={form.email}
                                onChange={setValue}
                         />
-                        {errors.has('email') && (<span>{errors.first('email')}</span>)}
+                        {errors.print('email')}
                     </label>
                     <label>
                         <span>Senha</span>
@@ -83,7 +82,7 @@ export default function Register() {
                              src={showPassword ? closeEye : eye}
                              onClick={() => setShowPassword(!showPassword)}
                         />
-                        {errors.has('password') && (<span>{errors.first('password')}</span>)}
+                        {errors.print('password')}
                     </label>
 
                     <button className="submit" type="submit">Cadastrar</button>

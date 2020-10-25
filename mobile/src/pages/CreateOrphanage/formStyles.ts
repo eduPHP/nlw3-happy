@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
         width: 64,
         height: 64,
         borderRadius: 20,
-        marginBottom: 32,
+        marginBottom: 24,
         marginRight: 8
     },
 
@@ -21,8 +21,8 @@ export const styles = StyleSheet.create({
         color: colors.textBase,
         fontSize: 24,
         fontFamily: fonts.bold,
-        marginBottom: 32,
-        paddingBottom: 24,
+        marginBottom: 24,
+        paddingBottom: 16,
         borderBottomWidth: 0.8,
         borderBottomColor: colors.line
     },
@@ -56,10 +56,10 @@ export const styles = StyleSheet.create({
         borderColor: '#96d2f0',
         borderWidth: 1.4,
         borderRadius: 20,
-        height: 56,
+        width: 64,
+        height: 64,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 32,
     },
 
 
@@ -76,7 +76,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 56,
-        marginTop: 32,
+        marginTop: 16,
     },
 
     nextButtonText: {

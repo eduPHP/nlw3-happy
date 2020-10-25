@@ -48,19 +48,23 @@ export default function OrphanagesMap() {
         setMapConfig(regionForCoordinates([{latitude: coords.latitude, longitude: coords.longitude}]))
     }
 
+    async function getOrphanages() {
+        setLoading(true);
+        await getLocation();
+        api.get('orphanages').then(response => {
+            if (response.data.orphanages.length) {
+                setOrphanages(response.data.orphanages)
+            } else {
+                setMapConfig(regionForCoordinates(response.data.orphanages))
+            }
+            setSelectedOrphanage(null)
+            setLoading(false)
+        })
+    }
+
     useFocusEffect(
         useCallback(() => {
-            setLoading(true);
-            (async function () {await getLocation})();
-            api.get('orphanages').then(response => {
-                if (response.data.orphanages.length) {
-                    setOrphanages(response.data.orphanages)
-                } else {
-                    setMapConfig(regionForCoordinates([myLocation]))
-                }
-                setSelectedOrphanage(null)
-                setLoading(false)
-            })
+            getOrphanages()
         }, [])
     );
 
@@ -84,7 +88,7 @@ export default function OrphanagesMap() {
     }
 
     if(loading) {
-        return (<Splash />)
+        return (<Splash text="Obtendo lista de orfanatos..." />)
     }
 
     return (
@@ -104,11 +108,6 @@ export default function OrphanagesMap() {
                             longitude: orphanage.longitude
                         }}
                     >
-                        {/*<Callout tooltip onPress={() => handleNavigateToOrphanageDetails(orphanage.id)}>*/}
-                        {/*    <View style={styles.calloutContainer}>*/}
-                        {/*        <Text style={styles.calloutText}>{orphanage.name} testando com nomes mais compridinhos o que aconteceria nesse caso</Text>*/}
-                        {/*    </View>*/}
-                        {/*</Callout>*/}
                     </Marker>
                 ))}
 
@@ -153,6 +152,9 @@ export default function OrphanagesMap() {
                     </RectButton>
                 </View>
             )}
+            <RectButton style={styles.refreshButton} onPress={getOrphanages}>
+                <Feather name={'refresh-cw'} size={20} color={colors.blue}/>
+            </RectButton>
         </View>
     );
 }
@@ -164,6 +166,19 @@ const styles = StyleSheet.create({
     map: {
         width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
+    },
+    refreshButton: {
+        position: "absolute",
+        top: 50,
+        right: 24,
+        width: 40,
+        height: 40,
+        backgroundColor: colors.onboardingButtonColor,
+        borderRadius: 20,
+
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 3
     },
     calloutContainer: {
         width: 160,

@@ -5,6 +5,7 @@ export const colors = {
     textLink: '#0089A5',
     textSuccess: '#37C77F',
     green: '#39CC83',
+    greenDark: '#19C06D',
     greenLight: '#EDFFF6',
     red: '#FF669D',
     redLight: '#FCF0F4',

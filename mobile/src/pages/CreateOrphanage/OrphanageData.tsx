@@ -88,10 +88,11 @@ export default function OrphanageData() {
                 {images.map(image => (
                     <Image source={{uri: image}} key={image} style={styles.uploadedImage} />
                 ))}
+                <TouchableOpacity style={styles.imagesInput} onPress={handleSelectImages}>
+                    <Feather name="plus" size={24} color="#15B6D6"/>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.imagesInput} onPress={handleSelectImages}>
-                <Feather name="plus" size={24} color="#15B6D6"/>
-            </TouchableOpacity>
+
 
             <RectButton style={styles.nextButton} onPress={handleCreateOrphanage}>
                 <Text style={styles.nextButtonText}>Continuar</Text>

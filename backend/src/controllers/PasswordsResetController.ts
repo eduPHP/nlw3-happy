@@ -8,17 +8,24 @@ import mailer from "../util/mailer"
 import bcrypt from "../util/bcrypt"
 import {app} from '../util/config'
 import User from "../models/User"
+import * as Yup from "yup";
 
+interface RequestProps {
+    email: string
+}
 
 export default {
     async store(req: Request, res: Response) {
-        const {email} = req.body
-
+        const schema = Yup.object().shape({
+            email: Yup.string().email().required(),
+            base: Yup.string().nullable(),
+        })
+        const data = await schema.validate(req.body, {abortEarly: false}) as RequestProps
         const userRepo = getRepository(User)
         const passwordResetRepo = getRepository(PasswordReset)
-        const user = await userRepo.findOne({email})
+        const user = await userRepo.findOne(data)
         if (!user) {
-            return res.status(400).json({errors: {email: 'Não foi possível enviar o email.'}})
+            return res.status(422).json({errors: {email: ['Não foi possível enviar o email.']}})
         }
 
         const token = Math.random().toString(36).substring(3)
@@ -30,11 +37,11 @@ export default {
 
         const messageHtml = `
             <p>Clique no link a seguir para alterar sua senha</p>
-            <a href="${app.frontend}/admin/login/reset/${passwordReset.id}.${token}">Altere sua senha.</a>
+            <a href="${app.frontend}/admin/forgot/${passwordReset.id}.${token}">Altere sua senha.</a>
         `
         const messageText = `
              Acesse o link a seguir para alterar sua senha:
-             ${app.frontend}/admin/login/reset/${passwordReset.id}.${token}
+             ${app.frontend}/admin/forgot/${passwordReset.id}.${token}
          `
         const result = await mailer.send(user.email, 'Recuperação de senha', messageText, messageHtml)
 

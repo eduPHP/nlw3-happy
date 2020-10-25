@@ -13,8 +13,12 @@ export default {
         const where = status ? {status} : {status: 'active'}
 
         const orphanages = await repo.find({relations: ['images'], where})
+        const [, hasPending] = await repo.findAndCount({where: {status: 'pending'}, order: {id: 'DESC'}})
 
-        return res.json({orphanages: orphanages_view.renderMany(orphanages)})
+        return res.json({
+            orphanages: orphanages_view.renderMany(orphanages),
+            hasPending: !!hasPending
+        })
     },
 
     async show(req: Request, res: Response) {

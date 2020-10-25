@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import OrphanagesMap from "./pages/OrphanagesMap";
 import Onboarding from "./pages/Onboarding";
 import OrphanageDetails from "./pages/OrphanageDetails";
+import Done from "./components/Done";
 
 const {Navigator, Screen} = createStackNavigator()
 
@@ -17,6 +18,7 @@ export default function Routes() {
         <NavigationContainer>
             <Navigator screenOptions={{headerShown: false}}>
                 <Screen name={'Onboarding'} component={Onboarding} />
+                <Screen name={'Done'} component={Done} />
                 <Screen name={'OrphanagesMap'} component={OrphanagesMap} />
                 <Screen name={'OrphanageDetails'} component={OrphanageDetails} />
                 <Screen name={'SelectMapPosition'} component={SelectMapPosition} />

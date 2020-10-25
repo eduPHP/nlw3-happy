@@ -1,16 +1,47 @@
-import React, {useState} from "react";
+import React, {FormEvent, useState} from "react";
 import logoAlt from '../../images/logo-alt.svg'
 import eye from '../../images/eye-icon.svg'
 import closeEye from '../../images/eye-icon-close.svg'
 import {FiArrowLeft} from 'react-icons/fi'
 import CustomCheckbox from '../../components/Checkbox'
 import '../../styles/pages/admin/login.css'
+import Errors from "../../util/errors";
+import {setStateValue} from "../../util/form";
+import api from "../../services/api";
+import {Link, useHistory} from "react-router-dom";
+
+interface LoginForm {
+    email: string
+    password: string
+    remember: boolean
+}
+
+let initialState = {
+    email: '',
+    password: '',
+    remember: false
+};
 
 export default function Login() {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [remember, setRemember] = useState(false)
+    const history = useHistory()
+    const [form, setForm] = useState<LoginForm>(initialState)
     const [showPassword, setShowPassword] = useState(false)
+    const errors = new Errors([])
+
+    function setValue(e: React.ChangeEvent<HTMLInputElement>) {
+        setStateValue(e, form, setForm, errors)
+    }
+
+    function login(event: FormEvent) {
+        event.preventDefault()
+
+        api.post('auth/login', form).then(res => {
+            sessionStorage.setItem('@Happy.user', JSON.stringify(res.data.user))
+            sessionStorage.setItem('@Happy.token', res.data.token)
+            setForm(initialState)
+            history.push('/admin/orphanages')
+        }).catch(err => errors.record(err.response.data.errors))
+    }
 
     return (
         <div id="login">
@@ -25,35 +56,41 @@ export default function Login() {
                 <button className="return" type="button">
                     <FiArrowLeft size={26} color="#15C3D6" />
                 </button>
-                <form className="login-form">
+                <form className="login-form" onSubmit={login}>
                     <h2>Fazer login</h2>
 
                     <label>
                         <span>E-mail</span>
                         <input className="form-input" name="email"  type="email"
-                               value={email}
-                               onChange={event => setEmail(event.target.value)}
+                               value={form.email}
+                               onChange={setValue}
                         />
+                        {errors.print('email')}
                     </label>
                     <label>
                         <span>Senha</span>
                         <input className="form-input" name="password"
                                type={showPassword ? 'text' : 'password'}
-                               value={password}
-                               onChange={event => setPassword(event.target.value)}
+                               value={form.password}
+                               onChange={setValue}
                         />
                         <img className="see-password"  alt="Mostrar Senha"
                              src={showPassword ? closeEye : eye}
                              onClick={() => setShowPassword(!showPassword)}
                         />
+                        {errors.print('password')}
                     </label>
 
                     <div className="aditionals">
                         <label>
-                            <CustomCheckbox checked={remember} value={remember ? 1 : 0} onChange={(event: any) => setRemember(event.target.checked)} type="checkbox" /> Lembrar-me
+                            <CustomCheckbox
+                                name="remember"
+                                checked={form.remember}
+                                onChange={setValue}
+                            /> Lembrar-me
                         </label>
 
-                        <a href="#hold">Esqueci minha senha</a>
+                        <Link to="/admin/forgot">Esqueci minha senha</Link>
                     </div>
 
                     <button className="submit" type="submit">Entrar</button>

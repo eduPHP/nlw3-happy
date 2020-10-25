@@ -2,7 +2,6 @@ import MapView, {Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import {LinearGradient} from 'expo-linear-gradient';
 import React, {useEffect, useState} from "react";
 import {useRoute} from '@react-navigation/native'
-import 'leaflet/dist/leaflet.css'
 import {Feather} from "@expo/vector-icons";
 import {
     View,

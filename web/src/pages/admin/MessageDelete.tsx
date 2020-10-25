@@ -1,13 +1,25 @@
-import React from "react";
-import '../../styles/pages/message.css'
-import imgDelete from '../../images/delete.svg'
-import {useHistory} from "react-router-dom";
+import React, {SetStateAction} from 'react'
 
-export default function MessageDelete() {
+import imgDelete from '../../images/delete.svg'
+import {useHistory} from 'react-router-dom'
+import '../../styles/pages/message.css'
+import api from '../../services/api'
+
+interface ComponentProps {
+    orphanage: {
+        id: number
+        name: string
+    }
+    setRemove: SetStateAction<any>
+}
+
+export default function MessageDelete(props: ComponentProps) {
     const history = useHistory()
 
-    function handleDone() {
-        history.push('/app')
+    function handleConfirm() {
+        api.delete(`admin/orphanages/${props.orphanage.id}`).then(() => {
+            props.setRemove(null)
+        })
     }
 
     return (
@@ -17,9 +29,12 @@ export default function MessageDelete() {
                     <h1>Excluir!</h1>
                     <p>
                         <span>Você tem certeza que quer</span>
-                        <span>excluir Orf. Esperança?</span>
+                        <span>excluir {props.orphanage.name}?</span>
                     </p>
-                    <button type="button" onClick={handleDone}>Voltar para o mapa</button>
+                    <div className="buttons">
+                        <button type="button" className="cancel" onClick={() => props.setRemove(null)}>Cancelar</button>
+                        <button type="button" className="remove" onClick={handleConfirm}>Continuar</button>
+                    </div>
                 </div>
                 <img src={imgDelete} alt="Remove!"/>
             </div>
