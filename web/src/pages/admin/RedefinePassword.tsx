@@ -27,7 +27,7 @@ export default function RedefinePassword() {
             sessionStorage.setItem('@Happy.user', JSON.stringify(res.data.user))
             sessionStorage.setItem('@Happy.token', res.data.token)
             setPassword('')
-            history.push('/admin/orphanages')
+            history.push('/orphanages')
         }).catch(err => errors.record(err.response.data.errors))
     }
 

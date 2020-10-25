@@ -43,6 +43,10 @@ export default function Login() {
         }).catch(err => errors.record(err.response.data.errors))
     }
 
+    function handleBack() {
+        history.push('/')
+    }
+
     return (
         <div id="login">
             <div className="logo-wrapper">
@@ -53,9 +57,9 @@ export default function Login() {
                 </div>
             </div>
             <div className="form-wrapper">
-                <button className="return" type="button">
+                <Link className="return" to="/">
                     <FiArrowLeft size={26} color="#15C3D6" />
-                </button>
+                </Link>
                 <form className="login-form" onSubmit={login}>
                     <h2>Fazer login</h2>
 

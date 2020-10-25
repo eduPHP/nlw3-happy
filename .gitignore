@@ -1,6 +1,8 @@
 .idea
-backend/node_modules
-backend/.env
-mobile/node_modules
-web/node_modules
+**/*/.env
+**/*/.env.ts
+**/*/yarn-error.log
+node_modules
+**/*/node_modules
 backend/uploads/*.*
+yarn-error.log

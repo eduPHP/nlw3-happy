@@ -1,4 +1,4 @@
-import {BrowserRouter, Switch, Route, useHistory} from 'react-router-dom'
+import {BrowserRouter, Switch, Route, useHistory, useRouteMatch} from 'react-router-dom'
 import React from 'react'
 
 import OrphanagesPending from '../pages/admin/OrphanagesPending'
@@ -35,33 +35,39 @@ const getSessionAuth = (): Auth | null => {
 const AdminRoutes: React.FC = (): JSX.Element => {
     const history = useHistory()
     const auth = getSessionAuth()
-
-    if (!auth && history.location.pathname.search(/\/admin/) && history.location.pathname !== '/admin/login') {
-        history.push('/admin/login')
-    }
+    let adminRoute = useRouteMatch('/admin')
 
     if (auth) {
         api.defaults.headers.Authorization = `Bearer ${auth.token}`
-        return (<Switch>
-            <Route path="/admin" exact component={OrphanagesList} />
-            <Route path="/admin/orphanages" exact component={OrphanagesList} />
-            <Route path="/admin/orphanages/pending" component={OrphanagesPending} />
-        </Switch>)
+        return (
+            <Switch>
+                <Route path="/admin" exact component={OrphanagesList} />
+                <Route path="/admin/orphanages" exact component={OrphanagesList} />
+                <Route path="/admin/orphanages/pending" exact component={OrphanagesPending} />
+            </Switch>
+        )
     } else {
-        return (<Switch>
-            <Route path="/admin/login" component={Login} />
-            <Route path="/admin/register" exact component={Register} />
-            <Route path="/admin/forgot" exact component={ForgotPassword} />
-            <Route path="/admin/forgot/:token" component={RedefinePassword} />
-        </Switch>)
+        if (adminRoute && history.location.pathname !== '/admin/login') {
+            history.push('/admin/login')
+        }
+
+        return (
+            <Switch>
+                <Route path="/admin" exact component={Login} />
+                <Route path="/admin/login" component={Login} />
+                <Route path="/admin/register" exact component={Register} />
+                <Route path="/admin/forgot" exact component={ForgotPassword} />
+                <Route path="/admin/forgot/:token" component={RedefinePassword} />
+            </Switch>
+        )
     }
 }
 
 function Index() {
     return (
         <BrowserRouter>
+            <AdminRoutes />
             <Switch>
-                <AdminRoutes />
                 <Route path="/" exact component={Landing} />
                 <Route path="/app" component={OrphanagesMap} />
                 <Route path="/orphanages/create" exact component={CreateOrphanage} />
