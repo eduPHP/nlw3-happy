@@ -6,6 +6,7 @@ import {FiArrowLeft} from 'react-icons/fi'
 import '../../styles/pages/admin/login.css'
 import api from "../../services/api";
 import Errors from '../../util/errors'
+import {Link} from "react-router-dom";
 
 interface RefisterForm {
     name: string
@@ -49,9 +50,9 @@ export default function Register() {
                 </div>
             </div>
             <div className="form-wrapper">
-                <button className="return" type="button">
+                <Link to="/admin/login" className="return" type="button">
                     <FiArrowLeft size={26} color="#15C3D6" />
-                </button>
+                </Link>
                 <form className="login-form" method="POST" onSubmit={handleRegistration}>
                     <h2>Cadastrar</h2>
 

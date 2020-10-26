@@ -5,6 +5,7 @@ import '../../styles/pages/admin/login.css'
 import Errors from "../../util/errors";
 import {setStateValue} from "../../util/form";
 import api from "../../services/api";
+import {Link} from "react-router-dom";
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState('')
@@ -36,9 +37,9 @@ export default function ForgotPassword() {
                 </div>
             </div>
             <div className="form-wrapper">
-                <button className="return" type="button">
+                <Link to="/admin/login" className="return" type="button">
                     <FiArrowLeft size={26} color="#15C3D6" />
-                </button>
+                </Link>
                 {requested ? (
                     <div className="login-form">
                         <h2>E-mail enviado</h2>

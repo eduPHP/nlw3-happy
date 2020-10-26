@@ -5,10 +5,10 @@ import { FiPlus } from "react-icons/fi";
 
 import api from "../../services/api";
 import happyMapIcon from "../../util/mapIcon";
-import Sidebar from "../../components/Sidebar";
 import '../../styles/pages/create-orphanage.css';
 import {useHistory, useParams} from "react-router-dom";
 import Toast from "../../components/Toast";
+import AdminSidebar from "../../components/admin/Sidebar";
 
 const tilesUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -112,11 +112,11 @@ export default function EditOrphanage() {
     return (
         <div id="page-create-orphanage">
             <Toast toastList={toasts} />
-            <Sidebar />
+            <AdminSidebar page="orphanages" hasPending={false} />
             <main>
                 <form className="create-orphanage-form" onSubmit={handleSubmit}>
                     <fieldset>
-                        <legend>Dados</legend>
+                        <legend>Editando orfanato {name}</legend>
 
                         <Map
                             center={[position.latitude,position.longitude]}
