@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FormEvent, useState} from "react";
+import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import {LeafletMouseEvent} from "leaflet";
 import { FiPlus } from "react-icons/fi";
@@ -12,7 +12,7 @@ import MessageDone from './MessageDone'
 const tilesUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
 export default function CreateOrphanage() {
-  const [position, setPosition] = useState({latitude: 0, longitude: 0})
+  const [position, setPosition] = useState({latitude: -28.8387213, longitude: -52.4998566})
   const [name, setName] = useState('')
   const [about, setAbout] = useState('')
   const [instructions, setInstructions] = useState('')
@@ -21,6 +21,12 @@ export default function CreateOrphanage() {
   const [images, setImages] = useState<File[]>([])
   const [previewImages, setPreviewImages] = useState<string[]>([])
   const [done, setDone] = useState(false)
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(position => {
+      setPosition({latitude: position.coords.latitude, longitude: position.coords.longitude})
+    })
+  }, [])
 
   function handleMapClick(event: LeafletMouseEvent) {
     const {lat: latitude, lng: longitude} = event.latlng
@@ -79,7 +85,7 @@ export default function CreateOrphanage() {
             <legend>Dados</legend>
 
             <Map
-                center={[-28.8387213, -52.4998566]}
+                center={[position.latitude, position.longitude]}
                 style={{ width: '100%', height: 280 }}
                 zoom={15}
                 onClick={handleMapClick}
