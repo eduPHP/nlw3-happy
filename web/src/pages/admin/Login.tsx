@@ -1,20 +1,15 @@
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useContext, useEffect, useState} from "react";
 import logoAlt from '../../images/logo-alt.svg'
 import eye from '../../images/eye-icon.svg'
 import closeEye from '../../images/eye-icon-close.svg'
 import {FiArrowLeft} from 'react-icons/fi'
 import CustomCheckbox from '../../components/Checkbox'
 import '../../styles/pages/admin/login.css'
-import Errors from "../../util/errors";
 import {setStateValue} from "../../util/form";
-import api from "../../services/api";
-import {Link, useHistory} from "react-router-dom";
-
-interface LoginForm {
-    email: string
-    password: string
-    remember: boolean
-}
+import {Link} from "react-router-dom";
+import {AppContext} from "../../contexts/app";
+import {LoginForm} from "../../contexts/hooks/useAuth";
+import history from "../../routes/history";
 
 let initialState = {
     email: '',
@@ -23,24 +18,29 @@ let initialState = {
 };
 
 export default function Login() {
-    const history = useHistory()
+    const {handleLogin, auth, errors} = useContext(AppContext)
     const [form, setForm] = useState<LoginForm>(initialState)
     const [showPassword, setShowPassword] = useState(false)
-    const errors = new Errors([])
+
+    useEffect(() => {
+        if (auth) history.push('/admin/orphanages')
+    }, [])
 
     function setValue(e: React.ChangeEvent<HTMLInputElement>) {
         setStateValue(e, form, setForm, errors)
     }
 
-    function login(event: FormEvent) {
+    async function login(event: FormEvent) {
         event.preventDefault()
 
-        api.post('auth/login', form).then(res => {
-            sessionStorage.setItem('@Happy.user', JSON.stringify(res.data.user))
-            sessionStorage.setItem('@Happy.token', res.data.token)
+        const result = await handleLogin(form)
+
+        if (result === true) {
             setForm(initialState)
             history.push('/admin/orphanages')
-        }).catch(err => errors.record(err.response.data.errors))
+        } else {
+            errors.record(result)
+        }
     }
 
     function handleBack() {
@@ -57,9 +57,9 @@ export default function Login() {
                 </div>
             </div>
             <div className="form-wrapper">
-                <Link className="return" to="/">
+                <button className="return" onClick={handleBack}>
                     <FiArrowLeft size={26} color="#15C3D6" />
-                </Link>
+                </button>
                 <form className="login-form" onSubmit={login}>
                     <h2>Fazer login</h2>
 

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
 import AdminSidebar from "../../components/admin/Sidebar";
 import '../../styles/pages/admin/orphanages-list.css'
@@ -7,8 +7,8 @@ import happyMapIcon from "../../util/mapIcon";
 import api from "../../services/api";
 import 'leaflet/dist/leaflet.css'
 import MessageDelete from "./MessageDelete";
-import Toast from "../../components/Toast";
-import {useHistory} from "react-router-dom";
+import history from "../../routes/history";
+import {AppContext} from "../../contexts/app";
 
 const tilesUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -20,11 +20,10 @@ interface Orphanage {
 }
 
 export default function OrphanagesList() {
-    const history = useHistory()
+    const {toast} = useContext(AppContext)
     const [orphanages, setOrphanages] = useState<Orphanage[]>([])
     const [hasPending, setHasPending] = useState(false)
     const [remove, setRemove] = useState<Orphanage|null>(null)
-    const [toasts, setToasts] = useState<Toast[]>([])
 
     useEffect(() => {
         api.get('admin/orphanages').then(res => {
@@ -35,11 +34,9 @@ export default function OrphanagesList() {
 
     function handleRemove(removed: boolean) {
         if (removed) {
-            setToasts([{
-                title: '',
-                description: `Orfanato ${remove?.name} removido!`
-            }])
-            setTimeout(() => setToasts([]), 4000)
+            toast({
+                message: `Orfanato ${remove?.name} removido!`
+            })
         }
         setRemove(null)
     }
@@ -50,7 +47,6 @@ export default function OrphanagesList() {
 
     return (
         <div id="orphanages-list">
-            <Toast toastList={toasts} />
             <AdminSidebar page="orphanages" hasPending={hasPending} />
             <div className="container">
                 <header>

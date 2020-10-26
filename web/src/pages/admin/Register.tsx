@@ -1,4 +1,4 @@
-import React, {FormEvent, SyntheticEvent, useCallback, useState} from "react";
+import React, {FormEvent, SyntheticEvent, useCallback, useContext, useState} from "react";
 import logoAlt from '../../images/logo-alt.svg'
 import eye from '../../images/eye-icon.svg'
 import closeEye from '../../images/eye-icon-close.svg'
@@ -7,6 +7,7 @@ import '../../styles/pages/admin/login.css'
 import api from "../../services/api";
 import Errors from '../../util/errors'
 import {Link} from "react-router-dom";
+import {AppContext} from "../../contexts/app";
 
 interface RefisterForm {
     name: string
@@ -21,7 +22,7 @@ export default function Register() {
         password: '',
     })
     const [showPassword, setShowPassword] = useState(false)
-    const errors = new Errors([])
+    const {errors} = useContext(AppContext)
 
     function setValue(e: React.ChangeEvent<HTMLInputElement>) {
         const {value, name} = e.currentTarget

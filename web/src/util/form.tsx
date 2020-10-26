@@ -1,5 +1,6 @@
-import React, {useState} from "react"
+import React, {useContext, useState} from "react"
 import Errors from "./errors";
+import {AppContext} from "../contexts/app";
 
 export const setStateValue = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -24,7 +25,8 @@ export default class Form {
     public errors: Errors
 
     constructor(state: any) {
-        this.errors = new Errors([]);
+        const {errors} = useContext(AppContext)
+        this.errors = errors;
         [this.state, this.setState] = useState(state);
     }
 

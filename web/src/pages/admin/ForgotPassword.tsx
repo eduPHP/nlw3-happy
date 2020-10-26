@@ -1,4 +1,4 @@
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useContext, useState} from "react";
 import logoAlt from '../../images/logo-alt.svg'
 import {FiArrowLeft} from 'react-icons/fi'
 import '../../styles/pages/admin/login.css'
@@ -6,11 +6,12 @@ import Errors from "../../util/errors";
 import {setStateValue} from "../../util/form";
 import api from "../../services/api";
 import {Link} from "react-router-dom";
+import {AppContext} from "../../contexts/app";
 
 export default function ForgotPassword() {
     const [email, setEmail] = useState('')
     const [requested, setRequested] = useState(false)
-    const errors = new Errors([])
+    const {errors} = useContext(AppContext)
 
     function setValue(e: React.ChangeEvent<HTMLInputElement>) {
         const {value, name} = e.currentTarget

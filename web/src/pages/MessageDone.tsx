@@ -1,10 +1,9 @@
 import React from "react";
 import '../styles/pages/message.css'
 import done from '../images/done.svg'
-import {useHistory} from "react-router-dom";
+import history from "../routes/history";
 
 export default function MessageDone() {
-    const history = useHistory()
 
     function handleDone() {
         history.push('/app')

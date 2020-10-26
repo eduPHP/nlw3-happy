@@ -1,32 +1,15 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import '../styles/components/toast.css'
+import {AppContext} from "../contexts/app";
 
-interface Toast {
-    title: string
-    description: string
-}
-
-interface ToastProps {
-    toastList: Toast[]
-}
-
-const Toast = (props: ToastProps) => {
-    const { toastList } = props;
-    const [list, setList] = useState<Toast[]>(toastList);
-
-    useEffect(() => {
-        setList(toastList);
-    }, [toastList, list]);
-
-    function removeItem(index: number) {
-        setList(toastList.splice(index, 1))
-    }
+const Toasts = () => {
+    const { toasts, removeToast } = useContext(AppContext);
 
     return (
         <div className="notification-container">
-            {list.map((toast, i) =>
+            {toasts.map((toast, i) =>
                 <div key={i} className="notification">
-                    <button onClick={() => removeItem(i)}>
+                    <button onClick={() => removeToast(i)}>
                         x
                     </button>
                     <div className="notification-image">
@@ -35,7 +18,7 @@ const Toast = (props: ToastProps) => {
                     <div>
                         <p className="notification-title">{toast.title}</p>
                         <p className="notification-message">
-                            {toast.description}
+                            {toast.message}
                         </p>
                     </div>
                 </div>
@@ -44,4 +27,4 @@ const Toast = (props: ToastProps) => {
     )
 }
 
-export default Toast;
+export default Toasts;

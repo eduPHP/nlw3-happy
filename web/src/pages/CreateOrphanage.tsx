@@ -39,7 +39,7 @@ export default function CreateOrphanage() {
     }
 
     let selectedImages = Array.from(event.target.files);
-    setImages(selectedImages)
+    setImages([...images, ...selectedImages])
 
     const selectedImagesPreview = selectedImages.map(image => {
       return URL.createObjectURL(image)
@@ -50,8 +50,10 @@ export default function CreateOrphanage() {
 
   async function handleImageRemove(index: number) {
     previewImages.splice(index, 1)
+    images.splice(index, 1)
 
     setPreviewImages([...previewImages])
+    setImages([...images])
   }
 
   async function handleSubmit(event: FormEvent) {

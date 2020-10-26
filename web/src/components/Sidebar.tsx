@@ -1,16 +1,15 @@
 import React from 'react'
 import mapMarkerImg from "../images/map-marker.svg";
 import {FiArrowLeft} from "react-icons/fi";
-import {useHistory} from "react-router-dom";
 import '../styles/components/sidebar.css'
 import marker from "../images/map-marker.svg";
-
+import history from "../routes/history";
 interface SidebarProps {
     expand?: boolean
 }
 
 export default function Sidebar(props: SidebarProps) {
-    const {goBack} = useHistory();
+    const {goBack} = history;
 
     return (
         <aside className={props.expand ? 'app-sidebar expanded' : 'app-sidebar'}>

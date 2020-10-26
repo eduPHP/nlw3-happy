@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FormEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from "react";
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import {LeafletMouseEvent} from "leaflet";
 import { FiPlus } from "react-icons/fi";
@@ -6,9 +6,10 @@ import { FiPlus } from "react-icons/fi";
 import api from "../../services/api";
 import happyMapIcon from "../../util/mapIcon";
 import '../../styles/pages/create-orphanage.css';
-import {useHistory, useParams} from "react-router-dom";
-import Toast from "../../components/Toast";
+import {useParams} from "react-router-dom";
 import AdminSidebar from "../../components/admin/Sidebar";
+import {AppContext} from "../../contexts/app";
+import history from "../../routes/history";
 
 const tilesUrl = 'https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'
 
@@ -21,7 +22,7 @@ interface RouteParams {
 }
 
 export default function EditOrphanage() {
-    const history = useHistory()
+    const {toast} = useContext(AppContext)
     const params = useParams<RouteParams>()
     const [position, setPosition] = useState({latitude: 0, longitude: 0})
     const [name, setName] = useState('')
@@ -31,7 +32,6 @@ export default function EditOrphanage() {
     const [open_on_weekends, setOpenOnWeekends] = useState(true)
     const [images, setImages] = useState<File[]>([])
     const [previewImages, setPreviewImages] = useState<ImageType[]>([])
-    const [toasts, setToasts] = useState<Toast[]>([])
 
     useEffect(() => {
         api.get(`orphanages/${params.id}`).then(resposne => {
@@ -94,14 +94,11 @@ export default function EditOrphanage() {
         images.forEach(image => data.append('images', image))
 
         await api.put(`/admin/orphanages/${params.id}`, data).then(response => {
-            setToasts([{
+            toast({
                 title: 'Sucesso',
-                description: `Orfanato ${name} foi atualizado!`
-            }])
-            setTimeout(() => {
-                setToasts([])
-                history.push('/admin/orphanages')
-            }, 4000)
+                message: `Orfanato ${name} foi atualizado!`
+            })
+            history.push('/admin/orphanages')
         })
     }
 
@@ -111,7 +108,6 @@ export default function EditOrphanage() {
 
     return (
         <div id="page-create-orphanage">
-            <Toast toastList={toasts} />
             <AdminSidebar page="orphanages" hasPending={false} />
             <main>
                 <form className="create-orphanage-form" onSubmit={handleSubmit}>

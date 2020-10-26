@@ -1,12 +1,12 @@
 .notification-container {
     position: absolute;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     z-index: 20;
     bottom: 0;
     right: 0;
     color: #fff;
-    padding: 0.75rem;
+    padding: 0.25rem 0.75rem;
 }
 
 .notification-container .notification {
@@ -17,6 +17,9 @@
     border-radius: 4px;
     position: relative;
     align-items: center;
+    margin-bottom: 0.5rem;
+    width: 375px;
+    max-width: 375px;
 }
 .notification-container .notification .notification-image {
     display: flex;

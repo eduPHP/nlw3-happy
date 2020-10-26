@@ -1,22 +1,22 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import mapMarkerImg from "../../images/map-marker.svg";
-import {useHistory} from "react-router-dom";
 import '../../styles/components/sidebar.css'
 import marker from "../../images/map-marker.svg";
 import exitIcon from "../../images/exit-icon.svg";
+import {AppContext} from "../../contexts/app";
+import history from "../../routes/history";
 
 interface SidebarProps {
     expand?: boolean
-    // children?: JSX.Element[] | JSX.Element
     page: string
     hasPending: boolean
 }
 
 export default function AdminSidebar(props: SidebarProps) {
-    const history = useHistory()
-    function handleLogout() {
-        sessionStorage.removeItem('@Happy.user')
-        sessionStorage.removeItem('@Happy.token')
+    const {handleLogout} = useContext(AppContext)
+
+    function handleLogoutButton() {
+        handleLogout()
         history.push('/admin/login')
     }
     return (
@@ -53,7 +53,7 @@ export default function AdminSidebar(props: SidebarProps) {
                 </footer>
             ) : (
                 <footer>
-                    <button type="button" onClick={handleLogout}>
+                    <button type="button" onClick={handleLogoutButton}>
                         <img src={exitIcon} width={25} height={25} alt="Sair"/>
                     </button>
                 </footer>

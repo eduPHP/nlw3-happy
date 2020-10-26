@@ -1,24 +1,25 @@
-import React, {FormEvent, useState} from "react";
+import React, {FormEvent, useContext, useState} from "react";
 
 import logoAlt from '../../images/logo-alt.svg'
 import {FiArrowLeft} from 'react-icons/fi'
 import eye from "../../images/eye-icon.svg";
 import closeEye from '../../images/eye-icon-close.svg'
 import '../../styles/pages/admin/login.css'
-import {useHistory, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import api from "../../services/api";
 import Errors from "../../util/errors";
+import history from "../../routes/history";
+import {AppContext} from "../../contexts/app";
 
 interface RouteParams {
     token: string;
 }
 
 export default function RedefinePassword() {
-    const history = useHistory()
     const params = useParams<RouteParams>()
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
-    const errors = new Errors([])
+    const {errors} = useContext(AppContext)
 
     function handlePasswordReset(e: FormEvent) {
         e.preventDefault()
