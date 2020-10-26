@@ -39,7 +39,13 @@ export default function CreateOrphanage() {
       return URL.createObjectURL(image)
     })
 
-    setPreviewImages(selectedImagesPreview)
+    setPreviewImages([...previewImages, ...selectedImagesPreview])
+  }
+
+  async function handleImageRemove(index: number) {
+    previewImages.splice(index, 1)
+
+    setPreviewImages([...previewImages])
   }
 
   async function handleSubmit(event: FormEvent) {
@@ -104,7 +110,17 @@ export default function CreateOrphanage() {
               <label htmlFor="images">Fotos</label>
 
               <div className="images-container">
-                {previewImages.map(image => (<img key={image} src={image} alt={name || 'image'}/>))}
+                {previewImages.map((image, i) => (
+                    <div key={i} className="image-wrapper">
+                      <button type="button" className="image-remove" onClick={() => handleImageRemove(i)}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M18 6L6 18" stroke="#FF669D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M6 6L18 18" stroke="#FF669D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </button>
+                      <img src={image} alt={name || 'image'}/>
+                    </div>
+                ))}
 
                 <label htmlFor="image[]" className="new-image">
                   <FiPlus size={24} color="#15b6d6" />

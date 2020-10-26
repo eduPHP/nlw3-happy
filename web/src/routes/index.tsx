@@ -13,6 +13,7 @@ import Orphanage from '../pages/Orphanage'
 import Login from '../pages/admin/Login'
 import Landing from '../pages/Landing'
 import api from "../services/api";
+import EditOrphanage from "../pages/admin/EditOrphanage";
 
 interface Auth {
     user: UserView
@@ -43,6 +44,7 @@ const AdminRoutes: React.FC = (): JSX.Element => {
             <Switch>
                 <Route path="/admin" exact component={OrphanagesList} />
                 <Route path="/admin/orphanages" exact component={OrphanagesList} />
+                <Route path="/admin/orphanages/:id" exact component={EditOrphanage} />
                 <Route path="/admin/orphanages/pending" exact component={OrphanagesPending} />
             </Switch>
         )
